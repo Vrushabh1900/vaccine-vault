@@ -333,6 +333,7 @@
     document.getElementById('login-section').classList.add('hidden');
     document.getElementById('dashboard-section').classList.remove('hidden');
     if (role === 'doctor') {
+        resetSections();
         // document.getElementById('client-id-section').classList.remove('hidden');
         // document.getElementById('main-dashboard').classList.remove('hidden');
         // document.getElementById('update-vaccine-btn').classList.remove('hidden'); // Show "Update Vaccine" button for doctors 
@@ -427,21 +428,34 @@
     }
 
     function showSection(section) {
-        document.getElementById('profile-section').classList.add('hidden');
-        document.getElementById('vaccine-history-section').classList.add('hidden');
-        document.getElementById('update-vaccine-section').classList.add('hidden');
-        document.getElementById('doctor-edits-section').classList.add('hidden');
-        document.getElementById('schedule-section').classList.add('hidden');
-
+        // document.getElementById('profile-section').classList.add('hidden');
+        // document.getElementById('vaccine-history-section').classList.add('hidden');
+        // document.getElementById('update-vaccine-section').classList.add('hidden');
+        // document.getElementById('doctor-edits-section').classList.add('hidden');
+        // document.getElementById('schedule-section').classList.add('hidden');
+        resetSections();
         document.getElementById(`${section}-section`).classList.remove('hidden');
     }
 
     function logout() {
         userData = { username: '', role: '', vaccines: [], doctorEdits: [] };
+        clientUniqueId = '';
+        resetSections();
         document.getElementById('dashboard-section').classList.add('hidden');
         document.getElementById('login-section').classList.remove('hidden');
         alert('You have been logged out.');
     }
+
+    function resetSections() {
+    // Hide all dashboard-related sections
+    document.getElementById('client-id-section').classList.add('hidden');
+    document.getElementById('main-dashboard').classList.add('hidden');
+    document.getElementById('profile-section').classList.add('hidden');
+    document.getElementById('vaccine-history-section').classList.add('hidden');
+    document.getElementById('update-vaccine-section').classList.add('hidden');
+    document.getElementById('doctor-edits-section').classList.add('hidden');
+    document.getElementById('schedule-section').classList.add('hidden');
+}
 
     function updateVaccine() {
         const name = document.getElementById('vaccine-name').value;
