@@ -1,0 +1,360 @@
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vaccine Vault</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 20px;
+        }
+        header h1 {
+            margin: 0;
+        }
+        .logout-btn {
+            background-color: #f44336;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            color: white;
+            cursor: pointer;
+        }
+        .logout-btn:hover {
+            background-color: #e53935;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+        .dashboard {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .dashboard button {
+            flex: 1;
+            margin: 0 5px;
+            padding: 10px;
+        }
+        .hidden {
+            display: none;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Vaccine Vault</h1>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+    </header>
+    <div class="container">
+        <!-- Login Section -->
+        <div id="login-section">
+            <h2>Login</h2>
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username">
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password">
+            </div>
+            <div class="form-group">
+                <label for="role">Role:</label>
+                <select id="role">
+                    <option value="client">Client</option>
+                    <option value="doctor">Doctor</option>
+                    <option value="hospital">Hospital</option>
+                </select>
+            </div>
+            <button class="btn" onclick="login()">Login</button>
+        </div>
+
+    <!-- Dashboard Section -->
+    <div id="dashboard-section" class="hidden">
+        <div id="client-id-section" class="hidden">
+            <h2>Enter Client Unique ID</h2>
+            <div class="form-group">
+                <label for="client-unique-id">Client Unique ID:</label>
+                <input type="text" id="client-unique-id">
+            </div>
+            <button class="btn" onclick="accessClientData()">Access Client Data</button>
+        </div>
+
+        <div class="dashboard hidden" id="main-dashboard">
+            <button onclick="showSection('profile')">Profile</button>
+            <button onclick="showSection('vaccine-history')">Vaccine History</button>
+            <button onclick="showSection('schedule')">Schedule</button>
+            <button id="update-vaccine-btn" onclick="showSection('update-vaccine')" class="hidden">Update Vaccine</button>
+            <button id="doctor-edits-btn" onclick="showSection('doctor-edits')" class="hidden">Doctor Edits</button>
+        </div>
+
+        <!-- Profile Section -->
+        <div id="profile-section" class="hidden">
+            <h2>Profile</h2>
+            <p><strong>Username:</strong> <span id="profile-username"></span></p>
+            <p><strong>Role:</strong> <span id="profile-role"></span></p>
+        </div>
+
+        <!-- Vaccine History Section -->
+        <div id="vaccine-history-section" class="hidden">
+            <h2>Vaccine History</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Dose</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody id="vaccine-history-table">
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Schedule Section -->
+        <div id="schedule-section" class="hidden">
+            <h2>Schedule</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Eligibility</th>
+                        <th>Vaccine/s</th>
+                        <th>Completed</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>At Birth</td>
+                        <td>BCG, OPV-0, Hepatitis B</td>
+                        <td><input type="checkbox" disabled></td>
+                    </tr>
+                    <tr>
+                        <td>6 weeks of age</td>
+                        <td>DPT-1, OPV-1, Hepatitis B-1</td>
+                        <td><input type="checkbox"></td>
+                    </tr>
+                    <tr>
+                        <td>10 weeks of age</td>
+                        <td>DPT-2, OPV-2, Hepatitis B-2</td>
+                        <td><input type="checkbox"></td>
+                    </tr>
+                    <tr>
+                        <td>14 weeks of age</td>
+                        <td>DPT-3, OPV-3, Hepatitis B-3</td>
+                        <td><input type="checkbox"></td>
+                    </tr>
+                    <tr>
+                        <td>9 months of age</td>
+                        <td>Measles, Vitamin A-1</td>
+                        <td><input type="checkbox"></td>
+                    </tr>
+                    <tr>
+                        <td>16-24 months of age</td>
+                        <td>DPT-1 Booster, OPV Booster, Measles-2, Vitamin A-2</td>
+                        <td><input type="checkbox"></td>
+                    </tr>
+                    <tr>
+                        <td>5-6 years of age</td>
+                        <td>DPT-2 Booster</td>
+                        <td><input type="checkbox"></td>
+                    </tr>
+                    <tr>
+                        <td>10-16 years of age</td>
+                        <td>TT</td>
+                        <td><input type="checkbox"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Update Vaccine Section -->
+        <div id="update-vaccine-section" class="hidden">
+            <h2>Update Vaccine</h2>
+            <div class="form-group">
+                <label for="vaccine-name">Vaccine Name:</label>
+                <input type="text" id="vaccine-name">
+            </div>
+            <div class="form-group">
+                <label for="vaccine-type">Vaccine Type:</label>
+                <input type="text" id="vaccine-type">
+            </div>
+            <div class="form-group">
+                <label for="vaccine-dose">Vaccine Dose:</label>
+                <input type="text" id="vaccine-dose">
+            </div>
+            <div class="form-group">
+                <label for="vaccine-max-age">Max Age:</label>
+                <input type="text" id="vaccine-max-age">
+            </div>
+            <div class="form-group">
+                <label for="vaccine-date">Date Administered:</label>
+                <input type="date" id="vaccine-date">
+            </div>
+            <button class="btn" onclick="updateVaccine()">Update</button>
+        </div>
+
+        <!-- Doctor Edits Section -->
+        <div id="doctor-edits-section" class="hidden">
+            <h2>Doctor Edits</h2>
+            <div class="form-group">
+                <label for="client-id">Enter Client Unique ID:</label>
+                <input type="text" id="client-id" disabled>
+            </div>
+            <ul id="doctor-edits-list"></ul>
+            <button class="btn" onclick="goBackToClientSelection()">Back to Client Selection</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let userData = {
+        username: '',
+        role: '',
+        vaccines: [],
+        doctorEdits: []
+    };
+
+    let clientUniqueId = '';
+
+    function login() {
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        const role = document.getElementById('role').value;
+
+        if (!username || !password) {
+            alert('Please fill in all fields.');
+            return;
+        }
+
+        userData.username = username;
+        userData.role = role;
+
+        document.getElementById('login-section').classList.add('hidden');
+        document.getElementById('dashboard-section').classList.remove('hidden');
+
+        if (role === 'doctor') {
+            document.getElementById('client-id-section').classList.remove('hidden');
+            document.getElementById('main-dashboard').classList.add('hidden');
+        } else {
+            document.getElementById('main-dashboard').classList.remove('hidden');
+        }
+
+        document.getElementById('profile-username').textContent = username;
+        document.getElementById('profile-role').textContent = role;
+    }
+
+    function accessClientData() {
+        const id = document.getElementById('client-unique-id').value;
+
+        if (!id) {
+            alert('Please enter a valid Client Unique ID.');
+            return;
+        }
+
+        clientUniqueId = id;
+        alert(`Accessing data for Client ID: ${clientUniqueId}`);
+
+        document.getElementById('client-id-section').classList.add('hidden');
+        document.getElementById('main-dashboard').classList.remove('hidden');
+    }
+
+    function showSection(section) {
+        document.getElementById('profile-section').classList.add('hidden');
+        document.getElementById('vaccine-history-section').classList.add('hidden');
+        document.getElementById('update-vaccine-section').classList.add('hidden');
+        document.getElementById('doctor-edits-section').classList.add('hidden');
+        document.getElementById('schedule-section').classList.add('hidden');
+
+        document.getElementById(`${section}-section`).classList.remove('hidden');
+    }
+
+    function logout() {
+        userData = { username: '', role: '', vaccines: [], doctorEdits: [] };
+        document.getElementById('dashboard-section').classList.add('hidden');
+        document.getElementById('login-section').classList.remove('hidden');
+        alert('You have been logged out.');
+    }
+
+    function updateVaccine() {
+        const name = document.getElementById('vaccine-name').value;
+        const type = document.getElementById('vaccine-type').value;
+        const dose = document.getElementById('vaccine-dose').value;
+        const date = document.getElementById('vaccine-date').value;
+
+        if (!name || !type || !dose || !date) {
+            alert('Please fill in all fields before updating.');
+            return;
+        }
+
+        const newVaccine = { name, type, dose, date };
+        userData.vaccines.push(newVaccine);
+
+        const table = document.getElementById('vaccine-history-table');
+        const row = table.insertRow();
+        row.insertCell(0).textContent = name;
+        row.insertCell(1).textContent = type;
+        row.insertCell(2).textContent = dose;
+        row.insertCell(3).textContent = date;
+
+        alert('Vaccine update successful!');
+    }
+
+    function goBackToClientSelection() {
+        document.getElementById('main-dashboard').classList.add('hidden');
+        document.getElementById('client-id-section').classList.remove('hidden');
+    }
+</script>
+</body>
+</html>
